@@ -55,6 +55,7 @@ footer p {
   margin-top: 20px;
   height: 170px;
   width:100%;
+  cursor: pointer;
 }
 
 .key {
@@ -73,4 +74,8 @@ footer p {
   font-family: 'Lato', sans-serif;
   font-weight: 400;
   text-transform:uppercase;
+}
+
+.city {
+  cursor: pointer
 }
