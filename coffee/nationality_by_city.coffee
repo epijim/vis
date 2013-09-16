@@ -131,6 +131,7 @@ $ ->
       .attr("height", bar_h)
       .attr("fill", (d) -> colors_data[d.index][1])
       .attr("stroke", "#333")
+      .attr("class", (d) -> "nationality " + d.name.replace(/[\ ,]/g, "_"))
 
     # City Titles
     bars.selectAll("title")
