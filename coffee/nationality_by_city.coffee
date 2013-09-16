@@ -18,6 +18,36 @@ $ ->
   key_rect_w = 20
   key_rect_h = 15
 
+  move_bars = () ->
+    classes = d3.select(this).attr("class").split(" ")
+    index = classes.indexOf("nationality")
+    if index > -1
+      classes.splice(index, 1)
+
+    index = classes.indexOf("key")
+    if index > -1
+      classes.splice(index, 1)
+
+    nationality_class = classes[0]
+
+    if classes.indexOf("selected") > -1
+      d3.selectAll("." + nationality_class)
+        .classed("selected", false)
+        .transition()
+          .attr("x", (d) -> d3.select(this).attr("orig_x"))
+
+      d3.selectAll(".nationality")
+        .style("display", "inline")
+    else
+      d3.selectAll(".nationality").style("display", "none")
+
+      d3.selectAll("." + nationality_class)
+        .classed("selected", true)
+        .style("display", "inline")
+        .transition()
+          .attr("x", x(0))
+
+
 # Where would be a better place to store
 # color information? in another json file?
 # In the css somehow?
@@ -53,7 +83,9 @@ $ ->
   keys = d3.select("#keys").selectAll('.key')
     .data(colors_data)
   .enter().append('div')
-    .attr('class', 'key')
+    .attr('class', (d) -> 'key ' + d[0].replace(/[\ ,]/g, "_"))
+    .on("click", move_bars)
+
 
   keys_vis = keys.append("svg:svg")
     .attr("width", key_w)
@@ -135,28 +167,7 @@ $ ->
       .attr("class", (d) -> "nationality " + d.name.replace(/[\ ,]/g, "_"))
 
     # Nationality interactions
-    nationalities.on "click", (d) ->
-      classes = d3.select(this).attr("class").split(" ")
-      index = classes.indexOf("nationality")
-      classes.splice(index, 1)
-      nationality_class = classes[0]
-
-      if classes.indexOf("selected") > -1
-        d3.selectAll("." + nationality_class)
-          .classed("selected", false)
-          .transition()
-            .attr("x", (d) -> d3.select(this).attr("orig_x"))
-
-        d3.selectAll(".nationality")
-          .style("display", "inline")
-      else
-        d3.selectAll(".nationality").style("display", "none")
-
-        d3.selectAll("." + nationality_class)
-          .classed("selected", true)
-          .style("display", "inline")
-          .transition()
-            .attr("x", x(0))
+    nationalities.on("click", move_bars)
 
     # City Titles
     bars.selectAll("title")
