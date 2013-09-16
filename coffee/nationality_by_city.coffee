@@ -123,7 +123,7 @@ $ ->
         state_sum += nationality.percent
 
     # Nationality Bars
-    cities.selectAll("nationality")
+    nationalities = cities.selectAll("nationality")
       .data((d) -> d.nationalities)
     .enter().append("svg:rect")
       .attr("width", (d) -> x(d.percent))
@@ -132,6 +132,18 @@ $ ->
       .attr("fill", (d) -> colors_data[d.index][1])
       .attr("stroke", "#333")
       .attr("class", (d) -> "nationality " + d.name.replace(/[\ ,]/g, "_"))
+
+    # Nationality interactions
+    nationalities.on "click", (d) ->
+      d3.selectAll(".nationality").style("display", "none")
+      classes = d3.select(this).attr("class").split(" ")
+      index = classes.indexOf("nationality")
+      classes.splice(index, 1)
+      nationality = classes[0]
+      d3.selectAll("." + nationality)
+        .style("display", "inline")
+        .transition()
+          .attr("x", x(0))
 
     # City Titles
     bars.selectAll("title")
