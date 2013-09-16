@@ -128,6 +128,7 @@ $ ->
     .enter().append("svg:rect")
       .attr("width", (d) -> x(d.percent))
       .attr("x", (d) -> x(d.begin))
+      .attr("orig_x", (d) -> x(d.begin))
       .attr("height", bar_h)
       .attr("fill", (d) -> colors_data[d.index][1])
       .attr("stroke", "#333")
@@ -135,15 +136,27 @@ $ ->
 
     # Nationality interactions
     nationalities.on "click", (d) ->
-      d3.selectAll(".nationality").style("display", "none")
       classes = d3.select(this).attr("class").split(" ")
       index = classes.indexOf("nationality")
       classes.splice(index, 1)
-      nationality = classes[0]
-      d3.selectAll("." + nationality)
-        .style("display", "inline")
-        .transition()
-          .attr("x", x(0))
+      nationality_class = classes[0]
+
+      if classes.indexOf("selected") > -1
+        d3.selectAll("." + nationality_class)
+          .classed("selected", false)
+          .transition()
+            .attr("x", (d) -> d3.select(this).attr("orig_x"))
+
+        d3.selectAll(".nationality")
+          .style("display", "inline")
+      else
+        d3.selectAll(".nationality").style("display", "none")
+
+        d3.selectAll("." + nationality_class)
+          .classed("selected", true)
+          .style("display", "inline")
+          .transition()
+            .attr("x", x(0))
 
     # City Titles
     bars.selectAll("title")
