@@ -56,7 +56,7 @@ $ ->
 # color matching is now done using the 'index'
 # parameter of the data.
   colors = {
-    "Germany":"#B1C6A9"
+    "Christs":"#B1C6A9"
     "Ireland":"#EF9E7A"
     "Canada And Newfoundland":"#BAB254"
     "England, Scotland, and Wales":"#ECCA53"
